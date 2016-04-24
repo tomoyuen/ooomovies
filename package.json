@@ -1,0 +1,23 @@
+{
+  "name": "movie-collection",
+  "version": "1.0.0",
+  "description": "a movie website",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "jade": "^1.11.0",
+    "moment": "^2.13.0",
+    "mongoose": "^4.4.5",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "website"
+  ],
+  "author": "tomoyuen",
+  "license": "ISC"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "movie-collection",
+  "description": "a movie website",
+  "main": "app.js",
+  "authors": [
+    "tomoyuen"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "website"
+  ],
+  "homepage": "http://tomo.club",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}
