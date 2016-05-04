@@ -3,6 +3,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     _ = require('underscore'),
     Movie = require('./models/movie'),
+    User = require('./models/user'),
     port = process.env.PORT || 3000,
     app = express()
 
@@ -32,6 +33,33 @@ app.get('/', function(req, res) {
         res.render('index', {
             title: 'imooc homepage',
             movies: movies
+        })
+    })
+})
+
+//signup
+app.post('/user/signup', function(req, res) {
+	var _user = req.body.user,
+		user = new User(_user)
+
+	user.save(function(err, user) {
+		if (err) {
+			console.log(err)
+		}
+
+		res.redirect('/admin/userlist')
+	})
+})
+
+//userlist
+app.get('/admin/userlist', function(req, res) {
+    User.fetch(function(err, users) {
+        if(err) {
+            console.log(err)
+        }
+        res.render('userlist', {
+            title: 'user list',
+            users: users
         })
     })
 })
