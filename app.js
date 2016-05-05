@@ -1,13 +1,17 @@
 var express = require('express'),
-    path = require('path'),
-    mongoose = require('mongoose'),
-    _ = require('underscore'),
-    Movie = require('./models/movie'),
-    User = require('./models/user'),
-    port = process.env.PORT || 3000,
-    app = express()
+  path = require('path'),
+  mongoose = require('mongoose'),
+  _ = require('underscore'),
+  Movie = require('./models/movie'),
+  User = require('./models/user'),
+  port = process.env.PORT || 3000,
+  app = express(),
+  dbUrl = 'mongodb://localhost/test',
+  session = require('express-session'),
+  mongoStore = require('connect-mongo')(session)
 
-mongoose.connect('mongodb://localhost/test')
+
+mongoose.connect(dbUrl)
 mongoose.connection.on('error', function(error) {
     console.log("数据库连接失败" + error)
 })
@@ -19,22 +23,34 @@ app.locals.moment = require('moment')
 app.set('views', './views/pages')
 app.set('view engine', 'jade')
 app.use(require('body-parser').urlencoded({extended: true}))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(require('cookie-parser')())
+app.use(session({
+	secret: 'imooc',
+	resave: false,
+	saveUninitialized: true,
+	store: new mongoStore({
+		url: dbUrl,
+		collection: 'sessions'
+	})
+}))
+
 app.listen(port)
+app.use(express.static(path.join(__dirname, 'public')))
 
 console.log('server is starting ' + port)
 
 //home
 app.get('/', function(req, res) {
-    Movie.fetch(function(err, movies) {
-        if(err) {
-            console.log(err)
-        }
-        res.render('index', {
-            title: 'imooc homepage',
-            movies: movies
-        })
-    })
+	console.log(req.session.user)
+  Movie.fetch(function(err, movies) {
+      if(err) {
+          console.log(err)
+      }
+      res.render('index', {
+          title: 'imooc homepage',
+          movies: movies
+      })
+  })
 })
 
 //signup
@@ -42,12 +58,51 @@ app.post('/user/signup', function(req, res) {
 	var _user = req.body.user,
 		user = new User(_user)
 
-	user.save(function(err, user) {
+	User.findOne({name: _user.name}, function(err, user) {
 		if (err) {
 			console.log(err)
 		}
 
-		res.redirect('/admin/userlist')
+		if (user) {
+			return res.redirect('/')
+		} else {
+			user.save(function(err, user) {
+				if (err) {
+					console.log(err)
+				}
+				res.redirect('/admin/userlist')
+			})
+		}
+	})
+})
+
+//signin
+app.post('/user/signin', function(req, res) {
+	var _user = req.body.user,
+		name = _user.name,
+		password = _user.password
+
+	User.findOne({name: name}, function(err, user) {
+		if (err) {
+			console.log(err)
+		}
+
+		if (!user) {
+			return res.redirect('/')
+		}
+
+		user.comparePassword(password, function(err, isMatch) {
+			if (err) {
+				console.log(err)
+			}
+
+			if (isMatch) {
+				req.session.user = user
+				return res.redirect('/')
+			} else {
+				console.log('Password is no matched')
+			}
+		})
 	})
 })
 
