@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 					args: [],
 					ignoredFiles: ['README.md', 'node_modules/**', 'bower_components'],
 					watchedExtensions: ['js'],
-					watchFolders: ['./'],
+					watchFolders: ['app'],
 					debug: true,
 					delayTime: 1,
 					env: {
