@@ -20,6 +20,7 @@ app.set('views', './app/views/pages')
 app.set('view engine', 'jade')
 app.use(require('body-parser').urlencoded({extended: true}))
 app.use(require('cookie-parser')())
+app.use(require('connect-multiparty')())
 app.use(session({
 	secret: 'imooc',
 	resave: false,
