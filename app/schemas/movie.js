@@ -1,5 +1,7 @@
 var mongoose = require('mongoose'),
-    MovieSchema = new mongoose.Schema({
+	Schema = mongoose.Schema,
+    ObjectId = Schema.Types.ObjectId,
+    MovieSchema = new Schema({
         director: String,
         title: String,
         language: String,
@@ -8,6 +10,10 @@ var mongoose = require('mongoose'),
         flash: String,
         poster: String,
         year: Number,
+        category: {
+        	type: ObjectId,
+        	ref: 'Category'
+        },
         meta: {
             createAt: {
                 type: Date,
@@ -21,7 +27,7 @@ var mongoose = require('mongoose'),
     })
 
 MovieSchema.pre('save', function(next) {
-    if(this.isNew) {
+    if (this.isNew) {
         this.meta.createAt = this.meta.updateAt = Date.now()
     } else {
         this.updateAt = Date.now()
@@ -39,7 +45,7 @@ MovieSchema.statics = {
     },
     findById: function(id, cb) {
         return this
-            .findOne({_id: id})
+            .findOne({ _id: id })
             .exec(cb)
     }
 }

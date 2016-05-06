@@ -2,7 +2,8 @@ var _ = require('underscore'),
 	Index = require('../app/controllers/index'),
   User = require('../app/controllers/user'),
   Movie = require('../app/controllers/movie'),
-  Comment = require('../app/controllers/comment')
+  Comment = require('../app/controllers/comment'),
+  Category = require('../app/controllers/category')
 
 module.exports = function(app) {
 	//pre handle user
@@ -35,4 +36,12 @@ module.exports = function(app) {
 
 	// Comment
 	app.post('/user/comment', User.signinRequired, Comment.save)
+
+	// Category
+	app.get('/admin/category/add', User.signinRequired, User.adminRequired, Category.add)
+	app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
+	app.post('/admin/category/save', User.signinRequired, User.adminRequired, Category.save)
+
+	// Results
+	app.get('/results', Index.search)
 }

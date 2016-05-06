@@ -1,5 +1,6 @@
 var Movie = require('../models/movie'),
 	Comment = require('../models/comment'),
+	Category = require('../models/category')
 	_ = require('underscore')
 
 //detail
@@ -23,18 +24,12 @@ exports.detail = function(req, res) {
 
 //movie add
 exports.add = function(req, res) {
-	res.render('admin', {
-		title: 'imooc admin',
-		movie: {
-			director: '',
-			nation: '',
-			title: '',
-			year: '',
-			poster: '',
-			language: '',
-			flash: '',
-			summary: ''
-		}
+	Category.find({}, function(err, categories) {
+		res.render('admin', {
+			title: 'imooc admin',
+			categories: categories,
+			movie: {}
+		})
 	})
 }
 
@@ -44,9 +39,12 @@ exports.update = function(req, res) {
 
 	if(id) {
 		Movie.findById(id, function(err, movie) {
-			res.render('admin', {
-				title: 'imooc admin update',
-				movie: movie
+			Category.find({}, function(err, categories) {
+				res.render('admin', {
+					title: 'imooc admin update',
+					categories: categories,
+					movie: movie
+				})
 			})
 		})
 	}
@@ -58,15 +56,15 @@ exports.save = function(req, res) {
 		movieObj = req.body.movie,
 		_movie
 
-	if(id !== 'undefined') {
+	if(id) {
 		Movie.findById(id, function(err, movie) {
-			if(err) {
+			if (err) {
 				console.log(err)
 			}
 
 			_movie = _.extend(movie, movieObj)
 			_movie.save(function(err, movie) {
-				if(err) {
+				if (err) {
 					console.log(err)
 				}
 
@@ -74,23 +72,37 @@ exports.save = function(req, res) {
 			})
 		})
 	} else {
-		_movie = new Movie({
-			director: movieObj.director,
-			title: movieObj.title,
-			nation: movieObj.nation,
-			language: movieObj.language,
-			year: movieObj.year,
-			poster: movieObj.poster,
-			summary: movieObj.summary,
-			flash: movieObj.flash
-		})
+		_movie = new Movie(movieObj)
+
+		var categoryId = movieObj.category,
+			categoryName = movieObj.categoryName
 
 		_movie.save(function(err, movie) {
 			if(err) {
 				console.log(err)
 			}
 
-			res.redirect('/movie/'+movie._id)
+			if (categoryName) {
+				var category = new Category({
+					name: categoryName,
+					movies: [movie._id]
+				})
+
+				category.save(function(err, category) {
+					_movie.category = category._id
+					movie.save(function(err, movie) {
+						res.redirect('/movie/'+movie._id)
+					})
+				})
+			} else if (categoryId) {
+				Category.findById(categoryId, function(err, category) {
+					category.movies.push(movie._id)
+
+					category.save(function(err, category) {
+						res.redirect('/movie/'+movie._id)
+					})
+				})
+			}
 		})
 	}
 }
@@ -101,6 +113,8 @@ exports.list = function(req, res) {
 		if(err) {
 			console.log(err)
 		}
+
+		console.log(movies)
 		res.render('list', {
 			title: 'movie list',
 			movies: movies
