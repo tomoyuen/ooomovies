@@ -10,6 +10,6 @@ this site used
 2.
 `bower install`
 3.
-'node app.js'
+`grunt`
 
 * please run mongodb service first.
