@@ -1,12 +1,12 @@
 var express = require('express'),
-  path = require('path'),
-  mongoose = require('mongoose'),
-  fs = require('fs'),
-  port = process.env.PORT || 3000,
-  app = express(),
-  dbUrl = 'mongodb://localhost/test',
-  session = require('express-session'),
-  mongoStore = require('connect-mongo')(session)
+	path = require('path'),
+	mongoose = require('mongoose'),
+	fs = require('fs'),
+	port = process.env.PORT || 3000,
+	app = express(),
+	dbUrl = 'mongodb://localhost/test',
+	session = require('express-session'),
+	mongoStore = require('connect-mongo')(session)
 
 mongoose.connect(dbUrl)
 
@@ -42,7 +42,6 @@ app.set('views', './app/views/pages')
 app.set('view engine', 'jade')
 app.use(require('body-parser').urlencoded({extended: true}))
 app.use(require('cookie-parser')())
-app.use(require('connect-multiparty')())
 app.use(session({
 	secret: 'imooc',
 	resave: false,
@@ -53,7 +52,8 @@ app.use(session({
 	})
 }))
 
-if ('development' === app.get('env')) {
+var env = process.env.NODE_ENV || 'development'
+if ('development' === env) {
 	app.set('showStackError', true)
 	app.use(require('morgan')(':method :url :status'))
 	app.locals.pretty = true

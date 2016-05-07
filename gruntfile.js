@@ -16,7 +16,21 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-
+		jshint: {
+			options: {
+				jshintrc: '.jshintrc',
+				ignores: ['public/libs/**/*.js']
+			},
+			all: ['public/js/*.js', 'test/**/*.js', 'app/**/*.js']
+		},
+		uglify: {
+			development: {
+				files: {
+					'public/build/admin.min.js': 'public/js/admin.js',
+					'public/build/datail.min.js': 'public/js/detail.js'
+				}
+			}
+		},
 		nodemon: {
 			dev: {
 				options: {
@@ -41,7 +55,7 @@ module.exports = function(grunt) {
 			src: ['test/**/*.js']
 		},
 		concurrent: {
-			tasks: ['nodemon', 'watch'],
+			tasks: ['jshint', 'uglify', 'nodemon', 'watch'],
 			options: {
 				logConcurrentOutput: true
 			}
@@ -52,6 +66,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-nodemon')
 	grunt.loadNpmTasks('grunt-concurrent')
 	grunt.loadNpmTasks('grunt-mocha-test')
+	grunt.loadNpmTasks('grunt-contrib-jshint')
+	grunt.loadNpmTasks('grunt-contrib-uglify')
 
 	grunt.option('force', true)
 	grunt.registerTask('default', ['concurrent'])

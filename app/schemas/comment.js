@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
-	ObjectId = Schema.Types.ObjectId
+	ObjectId = Schema.Types.ObjectId;
 
 var CommentSchema = new mongoose.Schema({
       movie: {
@@ -33,30 +33,30 @@ var CommentSchema = new mongoose.Schema({
               default: Date.now()
           }
       }
-  })
+  });
 
 CommentSchema.pre('save', function(next) {
     if(this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.meta.createAt = this.meta.updateAt = Date.now();
     } else {
-        this.updateAt = Date.now()
+        this.updateAt = Date.now();
     }
 
-    next()
-})
+    next();
+});
 
 CommentSchema.statics = {
     fetch: function(cb) {
         return this
             .find({})
             .sort('meta.updateAt')
-            .exec(cb)
+            .exec(cb);
     },
     findById: function(id, cb) {
         return this
             .findOne({_id: id})
-            .exec(cb)
+            .exec(cb);
     }
-}
+};
 
-module.exports = CommentSchema
+module.exports = CommentSchema;

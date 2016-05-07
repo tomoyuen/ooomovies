@@ -21,57 +21,57 @@ var mongoose = require('mongoose'),
                 default: Date.now()
             }
         }
-    })
+    });
 
 UserSchema.pre('save', function(next) {
-    var user = this
+    var user = this;
 
     if(this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.meta.createAt = this.meta.updateAt = Date.now();
     } else {
-        this.updateAt = Date.now()
+        this.updateAt = Date.now();
     }
 
     bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
         if (err) {
-            return next(err)
+            return next(err);
         } else {
         	bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) {
-                return next(err)
-            } else {
-            	user.password = hash
-            	next()
-            }
-        	})
+	            if (err) {
+	                return next(err);
+	            } else {
+	            	user.password = hash;
+	            	next();
+	            }
+        	});
         }
-    })
-})
+    });
+});
 
 UserSchema.methods = {
 	comparePassword: function(_password, cb) {
 		bcrypt.compare(_password, this.password, function(err, isMatch) {
 			if (err) {
-				return cb(err)
+				return cb(err);
 			}
 
-			cb(null, isMatch)
-		})
+			cb(null, isMatch);
+		});
 	}
-}
+};
 
 UserSchema.statics = {
     fetch: function(cb) {
         return this
             .find({})
             .sort('meta.updateAt')
-            .exec(cb)
+            .exec(cb);
     },
     findById: function(id, cb) {
         return this
             .findOne({_id: id})
-            .exec(cb)
+            .exec(cb);
     }
-}
+};
 
-module.exports = UserSchema
+module.exports = UserSchema;

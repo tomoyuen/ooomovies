@@ -14,30 +14,30 @@ var mongoose = require('mongoose'),
 				default: Date.now()
 			}
 		}
-	})
+	});
 
 CategorySchema.pre('save', function(next) {
 	if(this.isNew) {
-		this.meta.createAt = this.meta.updateAt = Date.now()
+		this.meta.createAt = this.meta.updateAt = Date.now();
 	} else {
-		this.updateAt = Date.now()
+		this.updateAt = Date.now();
 	}
 
-	next()
-})
+	next();
+});
 
 CategorySchema.statics = {
 	fetch: function(cb) {
 		return this
 			.find({})
 			.sort('meta.updateAt')
-			.exec(cb)
+			.exec(cb);
 	},
 	findById: function(id, cb) {
 		return this
 			.findOne({_id: id})
-			.exec(cb)
+			.exec(cb);
 	}
-}
+};
 
-module.exports = CategorySchema
+module.exports = CategorySchema;

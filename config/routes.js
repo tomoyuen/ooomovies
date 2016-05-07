@@ -1,9 +1,11 @@
 var _ = require('underscore'),
 	Index = require('../app/controllers/index'),
-  User = require('../app/controllers/user'),
-  Movie = require('../app/controllers/movie'),
-  Comment = require('../app/controllers/comment'),
-  Category = require('../app/controllers/category')
+	User = require('../app/controllers/user'),
+	Movie = require('../app/controllers/movie'),
+	Comment = require('../app/controllers/comment'),
+	Category = require('../app/controllers/category'),
+	multipart = require('connect-multiparty'),
+	multipartMiddleware = multipart()
 
 module.exports = function(app) {
 	//pre handle user
@@ -30,7 +32,7 @@ module.exports = function(app) {
 	app.get('/movie/:id', Movie.detail)
 	app.get('/admin/movie/add', User.signinRequired, User.adminRequired, Movie.add)
 	app.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired, Movie.update)
-	app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.savePoster, Movie.save)
+	app.post('/admin/movie/new', multipartMiddleware, User.signinRequired, User.adminRequired, Movie.savePoster, Movie.save)
 	app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list)
 	app.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.delete)
 
