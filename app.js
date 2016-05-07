@@ -1,6 +1,7 @@
 var express = require('express'),
   path = require('path'),
   mongoose = require('mongoose'),
+  fs = require('fs'),
   port = process.env.PORT || 3000,
   app = express(),
   dbUrl = 'mongodb://localhost/test',
@@ -8,6 +9,27 @@ var express = require('express'),
   mongoStore = require('connect-mongo')(session)
 
 mongoose.connect(dbUrl)
+
+// models loading
+var models_path = __dirname + '/app/models'
+var walk = function(path) {
+	fs
+		.readdirSync(path)
+		.forEach(function(file) {
+			var newPath = path + '/' + file,
+				stat = fs.statSync(newPath)
+
+			if (stat.isFile()) {
+				if (/(.*)\.(js|coffee)/.test(file)) {
+					require(newPath)
+				}
+			} else if (stat.isDirectory()) {
+				walk(newPath)
+			}
+		})
+}
+walk(models_path)
+
 mongoose.connection.on('error', function(error) {
     console.log("数据库连接失败" + error)
 })
