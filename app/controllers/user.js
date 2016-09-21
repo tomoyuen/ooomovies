@@ -19,12 +19,12 @@ exports.signup = function(req, res) {
 	var _user = req.body.user,
 		user = new User(_user);
 
-	User.findOne({name: _user.name}, function(err, user) {
+	User.findOne({name: _user.name}, function(err, result) {
 		if (err) {
 			console.log(err);
 		}
 
-		if (user) {
+		if (result) {
 			return res.redirect('/signin');
 		} else {
 			user.save(function(err, user) {
