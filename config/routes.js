@@ -41,8 +41,10 @@ module.exports = function(app) {
 
 	// Category
 	app.get('/admin/category/add', User.signinRequired, User.adminRequired, Category.add)
-	app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
-	app.post('/admin/category/save', User.signinRequired, User.adminRequired, Category.save)
+  app.get('/admin/category/update/:id', User.signinRequired, User.adminRequired, Category.update)
+  app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
+  app.post('/admin/category/save', User.signinRequired, User.adminRequired, Category.save)
+  app.get('/category/:id', Category.find)
 
 	// Results
 	app.get('/results', Index.search)

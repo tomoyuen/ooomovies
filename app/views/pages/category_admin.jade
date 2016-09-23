@@ -1,15 +1,16 @@
 extends ../layout
 
 block content
-	.container
-		.row
-			form.form-horizontal(method="POST", action="/admin/category/save")
-				.form-group
-					label.col-sm-2.control-label(for="inputTitle") 电影分类
-					.col-sm-10
-						input#inputCategory.form-control(type="text", name="category[name]", value=category.name)
-				.form-group
-					.col-sm-2
-					.col-sm-4
-						button.btn.btn-primary.form-control(type="submit") 保存
+  .container
+    .row
+      form.form-horizontal(method="POST", action="/admin/category/save")
+        input(type="hidden", name="category[_id]", value=category._id)
+        .form-group
+          label.col-sm-2.control-label(for="inputTitle") 电影分类
+          .col-sm-10
+            input#inputCategory.form-control(type="text", name="category[name]", value=category.name)
+        .form-group
+          .col-sm-2
+          .col-sm-4
+            button.btn.btn-primary.form-control(type="submit") 保存
 

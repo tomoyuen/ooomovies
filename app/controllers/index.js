@@ -23,7 +23,7 @@ exports.search = function(req, res) {
     var catId = req.query.cat,
     	page = parseInt(req.query.p, 10) || 0,
     	q = req.query.q,
-    	count = 2,
+    	count = 10,
     	index = page * count;
 
     if (catId) {
