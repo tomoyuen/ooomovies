@@ -42,8 +42,8 @@ exports.save = function(req, res) {
         }
 
         res.redirect('/admin/category/list');
-      })
-    })
+      });
+    });
   } else {
     _category = new Category(categoryObj);
 
@@ -53,7 +53,7 @@ exports.save = function(req, res) {
       }
 
       res.redirect('/admin/category/list');
-    })
+    });
   }
 };
 
@@ -101,4 +101,4 @@ exports.find = function(req, res) {
         });
       });
   }
-}
+};
