@@ -1,21 +1,21 @@
 var _ = require('underscore'),
-	Index = require('../app/controllers/index'),
-	User = require('../app/controllers/user'),
-	Movie = require('../app/controllers/movie'),
-	Comment = require('../app/controllers/comment'),
-	Category = require('../app/controllers/category'),
-	multipart = require('connect-multiparty'),
-	multipartMiddleware = multipart()
+    Index = require('../app/controllers/index'),
+    User = require('../app/controllers/user'),
+    Movie = require('../app/controllers/movie'),
+    Comment = require('../app/controllers/comment'),
+    Category = require('../app/controllers/category'),
+    multipart = require('connect-multiparty'),
+    multipartMiddleware = multipart();
 
 module.exports = function(app) {
-	//pre handle user
-	app.use(function(req, res, next) {
-		var _user = req.session.user
+  //pre handle user
+  app.use(function(req, res, next) {
+    var _user = req.session.user;
 
-		app.locals.user = _user
+    app.locals.user = _user;
 
-		next()
-	})
+    next();
+  })
 
 	// Index
 	app.get('/', Index.index)

@@ -1,20 +1,19 @@
 var express = require('express'),
-	path = require('path'),
-	mongoose = require('mongoose'),
-	fs = require('fs'),
-	port = process.env.PORT || 3000,
-	app = express(),
-	dbUrl = 'mongodb://localhost/test',
-	session = require('express-session'),
-	mongoStore = require('connect-mongo')(session)
+  path = require('path'),
+  mongoose = require('mongoose'),
+  fs = require('fs'),
+  port = process.env.PORT || 3000,
+  app = express(),
+  dbUrl = 'mongodb://localhost/test',
+  session = require('express-session'),
+  mongoStore = require('connect-mongo')(session);
 
-mongoose.connect(dbUrl)
+mongoose.connect(dbUrl);
 
 // models loading
 var models_path = __dirname + '/app/models'
 var walk = function(path) {
-	fs
-		.readdirSync(path)
+	fs.readdirSync(path)
 		.forEach(function(file) {
 			var newPath = path + '/' + file,
 				stat = fs.statSync(newPath)

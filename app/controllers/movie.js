@@ -1,9 +1,9 @@
 var Movie = require('../models/movie'),
-	Comment = require('../models/comment'),
-	Category = require('../models/category'),
-	_ = require('underscore'),
-	fs = require('fs'),
-	path = require('path');
+  	Comment = require('../models/comment'),
+  	Category = require('../models/category'),
+  	_ = require('underscore'),
+  	fs = require('fs'),
+  	path = require('path');
 
 //detail
 exports.detail = function(req, res) {
